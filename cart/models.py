@@ -6,8 +6,8 @@ from user.models    import User
 
 
 class Cart(models.Model):
-    product = models.ForeignKey('product.Product', on_delete=models.SET_NULL, null=True, related_name='carts')
-    voucher = models.ForeignKey('voucher.Voucher', on_delete=models.SET_NULL, null=True, related_name='carts')
+    product = models.ForeignKey('product.Product', on_delete=models.CASCADE, related_name='carts')
+    voucher = models.ForeignKey('voucher.Voucher', on_delete=models.CASCADE, related_name='carts')
 
     class Meta:
         db_table = 'carts'
