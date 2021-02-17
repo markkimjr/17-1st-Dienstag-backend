@@ -30,7 +30,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'user',
     'product',
-    'voucher'
+    'voucher',
+    'cart',
 ]
 
 MIDDLEWARE = [
