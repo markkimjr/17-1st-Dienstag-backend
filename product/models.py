@@ -7,9 +7,9 @@ class BagType(models.Model):
         db_table = 'bag_types'
 
 class BagModel(models.Model):
-    name           = models.CharField(max_length=100)
-    video          = models.URLField(max_length=2000)
-    bag_type       = models.ForeignKey('BagType', on_delete=models.CASCADE, related_name='bag_models')
+    name     = models.CharField(max_length=100)
+    video    = models.URLField(max_length=2000)
+    bag_type = models.ForeignKey('BagType', on_delete=models.CASCADE, related_name='bag_models')
 
     class Meta:
         db_table = 'bag_models'
@@ -26,13 +26,13 @@ class Product(models.Model):
         db_table = 'products'
 
 class Color(models.Model):
-    name    = models.CharField(max_length=100)
+    name = models.CharField(max_length=100)
 
     class Meta:
         db_table = 'colors'
 
 class Size(models.Model):
-    name    = models.CharField(max_length=100)
+    name = models.CharField(max_length=100)
 
     class Meta:
         db_table = 'sizes'
