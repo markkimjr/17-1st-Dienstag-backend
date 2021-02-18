@@ -1,13 +1,13 @@
 from django.db import models
 
 class BagType(models.Model):
-    type_name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100)
 
     class Meta:
         db_table = 'bag_types'
 
 class BagModel(models.Model):
-    model_name     = models.CharField(max_length=100)
+    name           = models.CharField(max_length=100)
     video          = models.URLField()
     bag_type       = models.ForeignKey('BagType', on_delete=models.CASCADE, related_name='bag_models')
 
@@ -26,13 +26,13 @@ class Product(models.Model):
         db_table = 'products'
 
 class Color(models.Model):
-    color_name    = models.CharField(max_length=100)
+    name    = models.CharField(max_length=100)
 
     class Meta:
         db_table = 'colors'
 
 class Size(models.Model):
-    size_name    = models.CharField(max_length=100)
+    name    = models.CharField(max_length=100)
 
     class Meta:
         db_table = 'sizes'
