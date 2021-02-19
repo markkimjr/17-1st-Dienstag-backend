@@ -14,8 +14,8 @@ class Cart(models.Model):
         db_table = 'carts'
 
 class Order(models.Model):
-    order_status                = models.ForeignKey('OrderStatus', on_delete=models.CASCADE, related_name='orders')
-    user                        = models.ForeignKey('user.User', on_delete=models.SET_NULL, null=True, related_name='orders')
+    order_status        = models.ForeignKey('OrderStatus', on_delete=models.CASCADE, related_name='orders')
+    user                = models.ForeignKey('user.User', on_delete=models.SET_NULL, null=True, related_name='orders')
     address_information = models.ForeignKey('AddressInformation', on_delete=models.SET_NULL, null=True, related_name='orders')
 
     class Meta:
@@ -40,7 +40,6 @@ class AddressInformation(models.Model):
     shipping_city               = models.CharField(max_length=100)
     shipping_postal_code        = models.CharField(max_length=100)
     shipping_phone_number       = models.CharField(max_length=100)
-    user                        = models.ForeignKey('user.User', on_delete=models.CASCADE, related_name='address_information')
 
     class Meta:
         db_table = 'address_information'
