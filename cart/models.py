@@ -34,7 +34,6 @@ class Order(models.Model):
     shipping_phone_number       = models.CharField(max_length=100)
     is_complete                 = models.BooleanField(default=False)
     user                        = models.ForeignKey('user.User', on_delete=models.SET_NULL, null=True, related_name='orders')
-    cart                        = models.ForeignKey('Cart', on_delete=models.SET_NULL, null=True, related_name='orders')
 
     class Meta:
         db_table = 'orders'
