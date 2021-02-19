@@ -8,7 +8,7 @@ from user.models    import User
 class Cart(models.Model):
     product = models.ForeignKey('product.Product', on_delete=models.CASCADE, related_name='carts')
     voucher = models.ForeignKey('voucher.Voucher', on_delete=models.CASCADE, related_name='carts')
-    user    = models.ForeignKey('user.User', on_delete=models.CASCADE, related_name='carts')
+    order   = models.ForeignKey('Order', on_delete=models.CASCADE, related_name='carts')
     
     class Meta:
         db_table = 'carts'
@@ -32,6 +32,7 @@ class Order(models.Model):
     shipping_city               = models.CharField(max_length=100)
     shipping_postal_code        = models.CharField(max_length=100)
     shipping_phone_number       = models.CharField(max_length=100)
+    is_complete                 = models.BooleanField(default=False)
     user                        = models.ForeignKey('user.User', on_delete=models.SET_NULL, null=True, related_name='orders')
     cart                        = models.ForeignKey('Cart', on_delete=models.SET_NULL, null=True, related_name='orders')
 
