@@ -1,20 +1,20 @@
 import json
 import jwt
 
-from django.views    import View
-from django.http     import JsonResponse, HttpResponse
+from django.views   import View
+from django.http    import JsonResponse, HttpResponse
 
-from cart.models     import Cart
-from user.models     import User
-from products.models import Product
-from voucher.models  import Voucher
+from cart.models    import Cart, Order, OrderStatus, AddressInformation
+from user.models    import User
+from product.models import Product
+from voucher.models import Voucher
 
 
-class CartView(View):
+class UserCartView(View):
+    @login_decorator
     def post(self, request):
-        data = json.loads(request.body)
-        user_id = data['user_id']
-        
+        data       = json.loads(request.body)
+        user_id    = request.user.id
 
         Cart.objects.create(
                 product_id = 
