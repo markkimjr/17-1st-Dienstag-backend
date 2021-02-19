@@ -40,6 +40,7 @@ class AddressInformation(models.Model):
     shipping_city               = models.CharField(max_length=100)
     shipping_postal_code        = models.CharField(max_length=100)
     shipping_phone_number       = models.CharField(max_length=100)
+    user                        = models.ForeignKey('user.User', on_delete=models.CASCADE, related_name='address_information')
 
     class Meta:
         db_table = 'address_information'
