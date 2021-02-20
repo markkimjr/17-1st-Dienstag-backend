@@ -14,10 +14,12 @@ class UserCartView(View):
     @login_decorator
     def post(self, request):
         try:
-            data       = json.loads(request.body)
-            product_id = data.get('product_id')
-            voucher_id = data.get('voucher_id')
-            user_id    = request.user.id
+            data             = json.loads(request.body)
+            product_id       = data.get('product_id')
+            voucher_quantity = data.get('voucher_quantity')
+            voucher_price    = data.get('voucher_price')
+            voucher_code     = data.get('voucher_code')
+            user_id          = request.user.id
 
             if product_id:
                 if OrderStatus.objects.get(name='checking_out').orders.filter(user_id=user_id).exists():
@@ -43,10 +45,13 @@ class UserCartView(View):
 
                     return JsonResponse({'message': 'SUCCESS'}, status=201)
 
-            if voucher_id:
+            if voucher_quantity and voucher_price and voucher_code:
                 if OrderStatus.objects.get(name="checking_out").orders.filter(user_id=user_id).exists():
                     Cart.objects.create(
-                            voucher_id = voucher_id,
+                            voucher_id = Voucher.objects.create(
+                                price    = voucher_price,
+                                code     = voucher_code,
+                                quantity = voucher_quantity).id,
                             user_id    = user_id,
                             order_id   = Order.objects.get(user_id=user_id, order_status=1).id
                             )
@@ -61,7 +66,10 @@ class UserCartView(View):
 
                     Cart.objects.create(
                             user_id    = user_id,
-                            product_id = product_id,
+                            voucher_id = Voucher.objects.create(
+                                price    = voucher_price,
+                                code     = voucher_code,
+                                quantity = voucher_quantity).id,
                             order_id   = Order.objects.get(user_id=user_id, order_status=1).id
                             )
 
@@ -69,3 +77,25 @@ class UserCartView(View):
 
         except KeyError:
             return JsonResponse({'message': 'KEY_ERROR'}, status=400)
+
+    #@login_decorator
+    #def get(self, request):
+     #   user_id = request.user.id
+
+
+#class UserCartDetailView(View):
+ #   @login_decorator
+  #  def get(self, request, user_id):
+
+
+
+#    @login_decorator
+#    def delete(self, request, product_id)
+
+
+
+
+
+
+
+
