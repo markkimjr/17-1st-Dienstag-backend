@@ -1,7 +1,7 @@
 import jwt
 import json
 
-from django.http import JsonResponse
+from django.http          import JsonResponse
 
 from .models              import User
 from dienstag.my_settings import SECRET, ALGORITHM
@@ -13,8 +13,8 @@ def login_decorator(func):
 
         try:
             access_token = request.headers['Authorization']
-            payload = jwt.decode(access_token, SECRET, ALGORITHM)
-            login_user = User.objects.get(id=payload['user_id'])
+            payload      = jwt.decode(access_token, SECRET, ALGORITHM)
+            login_user   = User.objects.get(id=payload['user_id'])
             request.user = login_user
             return func(self, request, *args, **kwargs)
 
