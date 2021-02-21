@@ -78,19 +78,70 @@ class UserCartView(View):
         except KeyError:
             return JsonResponse({'message': 'KEY_ERROR'}, status=400)
 
-    #@login_decorator
-    #def get(self, request):
-     #   user_id = request.user.id
+    @login_decorator
+    def get(self, request):
+        try:
+            user_id          = request.user.id
+            order            = Order.objects.get(user_id=user_id, order_status_id=1)
+            cart_list        = order.carts.all()
+            total_price      = 0
+            total_items_list = []
+
+            for cart in cart_list:
+                if cart.product_id:
+                    Product.objects.get(id=cart.product_id).price += total_price
+                    total_items_list.append(
+                            {
+                                'product_id': cart.product_id,
+                                'price'     : Product.objects.get(id=cart.product_id).price,
+                                'quantity'  : 1
+                                }
+                            )
+
+                if cart.voucher_id:
+                    Voucher.objects.get(id=cart.voucher_id).price * Voucher.objects.get(id=cart.voucher_id).quantity += total_price
+                    total_items_list.append(
+                            {
+                                'voucher_id' : cart.voucher_id,
+                                'price'      : Voucher.objects.get(id=cart.voucher_id).price,
+                                'quantity'   : Voucher.objects.get(id=cart.voucher_id).quantity
+                                }
+                            )
+
+                    return JsonResponse({'data': {
+                        'total_price'      : total_price,
+                        'total_items_list' : total_items_list 
+                        }}, status=200)
+        
+        except KeyError:
+            return JsonResponse({'message': 'KEY_ERROR'}, status=400)
 
 
-#class UserCartDetailView(View):
- #   @login_decorator
-  #  def get(self, request, user_id):
+class UserCartDetailView(View):
+    @login_decorator
+    def delete(self, request, item_id):
+        try:
+            user_id   = request.user.id
+            order     = Order.objects.get(user_id=user_id, order_status_id=1)
+            cart_list = order.carts.all()
+
+            for cart in cart_list:
+                if cart.product_id == item_id:
+                    cart.delete()
+                if cart.voucher_id == item_id:
+                    cart.delete()
+
+            return JsonResponse({'message': 'SUCCDSS'}, status=200)
+
+        except KeyError:
+            return JsonResponse({'message': 'KEY_ERROR'}, status=400)
 
 
 
-#    @login_decorator
-#    def delete(self, request, product_id)
+
+
+
+
 
 
 
