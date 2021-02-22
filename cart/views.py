@@ -6,6 +6,7 @@ from django.http    import JsonResponse, HttpResponse
 
 from cart.models    import Cart, Order, OrderStatus, AddressInformation
 from user.models    import User
+from user.utils     import login_decorator
 from product.models import Product
 from voucher.models import Voucher
 
@@ -25,22 +26,20 @@ class UserCartView(View):
                 if OrderStatus.objects.get(name='checking_out').orders.filter(user_id=user_id).exists():
                     Cart.objects.create(
                         product_id = product_id, 
-                        user_id    = user_id,
-                        order_id   = Order.objects.get(user_id=user_id, order_status=1).id
+                        order_id   = Order.objects.get(user_id=user_id, order_status_id=1).id
                         )
 
                     return JsonResponse({'message': 'SUCCESS'}, status=201)
 
                 else:
                     Order.objects.create(
-                            user_id      = user_id,
-                            order_status = 1
+                            user_id         = user_id,
+                            order_status_id = 1
                             )
 
                     Cart.objects.create(
-                            user_id    = user_id,
                             product_id = product_id,
-                            order_id   = Order.objects.get(user_id=user_id, order_status=1).id
+                            order_id   = Order.objects.get(user_id=user_id, order_status_id=1).id
                             )
 
                     return JsonResponse({'message': 'SUCCESS'}, status=201)
@@ -52,25 +51,23 @@ class UserCartView(View):
                                 price    = voucher_price,
                                 code     = voucher_code,
                                 quantity = voucher_quantity).id,
-                            user_id    = user_id,
-                            order_id   = Order.objects.get(user_id=user_id, order_status=1).id
+                            order_id   = Order.objects.get(user_id=user_id, order_status_id=1).id
                             )
 
                     return JsonResponse({'message': 'SUCCESS'}, status=201)
 
                 else:
                     Order.objects.create(
-                            user_id      = user_id,
-                            order_status = 1
+                            user_id         = user_id,
+                            order_status_id = 1
                             )
 
                     Cart.objects.create(
-                            user_id    = user_id,
                             voucher_id = Voucher.objects.create(
                                 price    = voucher_price,
                                 code     = voucher_code,
                                 quantity = voucher_quantity).id,
-                            order_id   = Order.objects.get(user_id=user_id, order_status=1).id
+                            order_id   = Order.objects.get(user_id=user_id, order_status_id=1).id
                             )
 
                     return JsonResponse({'message': 'SUCCESS'}, status=201)
@@ -89,7 +86,8 @@ class UserCartView(View):
 
             for cart in cart_list:
                 if cart.product_id:
-                    Product.objects.get(id=cart.product_id).price += total_price
+                    product_price = int(Product.objects.get(id=cart.product_id).price)
+                    total_price   += product_price
                     total_items_list.append(
                             {
                                 'product_id': cart.product_id,
@@ -99,7 +97,11 @@ class UserCartView(View):
                             )
 
                 if cart.voucher_id:
-                    Voucher.objects.get(id=cart.voucher_id).price * Voucher.objects.get(id=cart.voucher_id).quantity += total_price
+                    price         = int(Voucher.objects.get(id=cart.voucher_id).price)
+                    quantity      = int(Voucher.objects.get(id=cart.voucher_id).quantity)
+                    voucher_price = price * quantity
+                    total_price   += voucher_price
+
                     total_items_list.append(
                             {
                                 'voucher_id' : cart.voucher_id,
@@ -108,10 +110,11 @@ class UserCartView(View):
                                 }
                             )
 
-                    return JsonResponse({'data': {
-                        'total_price'      : total_price,
-                        'total_items_list' : total_items_list 
-                        }}, status=200)
+            return JsonResponse({
+                'data': {
+                    'total_price'      : total_price,
+                    'total_items_list' : total_items_list 
+                    }}, status=200)
         
         except KeyError:
             return JsonResponse({'message': 'KEY_ERROR'}, status=400)
@@ -135,18 +138,4 @@ class UserCartDetailView(View):
 
         except KeyError:
             return JsonResponse({'message': 'KEY_ERROR'}, status=400)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
