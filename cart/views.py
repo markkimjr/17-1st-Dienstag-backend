@@ -82,12 +82,15 @@ class UserCartView(View):
             order            = Order.objects.get(user_id=user_id, order_status_id=1)
             cart_list        = order.carts.all()
             total_price      = 0
+            total_products   = 0
             total_items_list = []
 
             for cart in cart_list:
                 if cart.product_id:
-                    product_price = int(Product.objects.get(id=cart.product_id).price)
-                    total_price   += product_price
+                    product_price  = int(Product.objects.get(id=cart.product_id).price)
+                    total_price    += product_price
+                    total_products += 1
+
                     total_items_list.append(
                             {
                                 'product_id': cart.product_id,
@@ -98,10 +101,11 @@ class UserCartView(View):
                             )
 
                 if cart.voucher_id:
-                    price         = int(Voucher.objects.get(id=cart.voucher_id).price)
-                    quantity      = int(Voucher.objects.get(id=cart.voucher_id).quantity)
-                    voucher_price = price * quantity
-                    total_price   += voucher_price
+                    price          = int(Voucher.objects.get(id=cart.voucher_id).price)
+                    quantity       = int(Voucher.objects.get(id=cart.voucher_id).quantity)
+                    voucher_price  = price * quantity
+                    total_price    += voucher_price
+                    total_products += quantity
 
                     total_items_list.append(
                             {
@@ -114,7 +118,8 @@ class UserCartView(View):
             return JsonResponse({
                 'data': {
                     'total_price'      : total_price,
-                    'total_items_list' : total_items_list 
+                    'total_items_list' : total_items_list,
+                    'total_products'   : total_products
                     }}, status=200)
         
         except KeyError:
@@ -135,7 +140,7 @@ class UserCartDetailView(View):
                 if cart.voucher_id == item_id:
                     cart.delete()
 
-            return JsonResponse({'message': 'SUCCDSS'}, status=200)
+            return JsonResponse({'message': 'SUCCESS'}, status=200)
 
         except KeyError:
             return JsonResponse({'message': 'KEY_ERROR'}, status=400)
