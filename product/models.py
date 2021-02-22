@@ -8,7 +8,6 @@ class BagType(models.Model):
 
 class BagModel(models.Model):
     name     = models.CharField(max_length=100)
-    video    = models.URLField(max_length=2000)
     bag_type = models.ForeignKey('BagType', on_delete=models.CASCADE, related_name='bag_models')
 
     class Meta:
