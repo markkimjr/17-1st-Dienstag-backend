@@ -92,7 +92,8 @@ class UserCartView(View):
                             {
                                 'product_id': cart.product_id,
                                 'price'     : Product.objects.get(id=cart.product_id).price,
-                                'quantity'  : 1
+                                'quantity'  : 1,
+                                'image_url' : Product.objects.get(id=cart.product_id).images.all()[0].image_url,
                                 }
                             )
 
@@ -106,7 +107,7 @@ class UserCartView(View):
                             {
                                 'voucher_id' : cart.voucher_id,
                                 'price'      : Voucher.objects.get(id=cart.voucher_id).price,
-                                'quantity'   : Voucher.objects.get(id=cart.voucher_id).quantity
+                                'quantity'   : Voucher.objects.get(id=cart.voucher_id).quantity,
                                 }
                             )
 
