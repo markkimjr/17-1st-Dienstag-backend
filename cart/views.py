@@ -29,7 +29,7 @@ class CartProductView(View):
 
             Order.objects.create(
                     user_id         = user_id,
-                    order_status_id = 1
+                    order_status_id = OrderStatus.objects.get(name="checking_out").id
                     )
 
             Cart.objects.create(
@@ -65,7 +65,7 @@ class CartVoucherView(View):
 
             Order.objects.create(
                     user_id         = user_id,
-                    order_status_id = 1
+                    order_status_id = OrderStatus.objects.get(name="checking_out").id
                     )
 
             Cart.objects.create(
