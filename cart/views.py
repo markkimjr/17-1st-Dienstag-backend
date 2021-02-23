@@ -114,7 +114,7 @@ class CartView(View):
 
                 if cart.voucher_id:
                     price          = int(Voucher.objects.get(id=cart.voucher_id).price)
-                    quantity       = int(Voucher.objects.get(id=cart.voucher_id).quantity)
+                    quantity       = Voucher.objects.get(id=cart.voucher_id).quantity
                     voucher_price  = price * quantity
                     total_price    += voucher_price
                     total_products += quantity
