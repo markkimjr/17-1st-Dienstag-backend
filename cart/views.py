@@ -11,6 +11,9 @@ from product.models import Product
 from voucher.models import Voucher
 
 
+ORDER_STATUS_CHECK = 'checking_out'
+
+
 class CartProductView(View):
     @login_decorator
     def post(self, request):
@@ -19,29 +22,29 @@ class CartProductView(View):
             product_id       = data.get('product_id')
             user_id          = request.user.id
 
-            if OrderStatus.objects.get(name='checking_out').orders.filter(user_id=user_id).exists():
-                if Cart.objects.filter(product_id=product_id, order_id=Order.objects.get(user_id=user_id, order_status_id=OrderStatus.objects.get(name="checking_out").id).id).exists():
+            if Order.objects.filter(user_id=user_id, order_status__name=ORDER_STATUS_CHECK, carts__product_id=product_id).exists():
 
-                    return JsonResponse({'message': False}, status=403) #만약에 product가 카트에 이미 존재하면 프론트한테 에러 메세지를 보내요~
+                return JsonResponse({'message': False}, status=403)
 
+            if Order.objects.filter(user_id=user_id, order_status__name=ORDER_STATUS_CHECK).exists() and not Cart.objects.filter(product_id=product_id, order__order_status__name=ORDER_STATUS_CHECK, order__user_id=user_id).exists():
                 Cart.objects.create(
                     product_id = product_id, 
-                    order_id   = Order.objects.get(user_id=user_id, order_status_id=OrderStatus.objects.get(name="checking_out").id).id
+                    order_id   = Order.objects.get(user_id=user_id, order_status__name=ORDER_STATUS_CHECK).id
                     )
+                return JsonResponse({'message': 'SUCCESS'}, status=201)
 
-                return JsonResponse({'message': 'SUCCESS'}, status=201) #User Order(checking_out)가 이미 존재할때 Cart에 상품을 추가해줘요~
+            if not Order.objects.filter(user_id=user_id, order_status__name=ORDER_STATUS_CHECK).exists():
+                Order.objects.create(
+                        user_id         = user_id,
+                        order_status_id = OrderStatus.objects.get(name=ORDER_STATUS_CHECK).id
+                        )
 
-            Order.objects.create(
-                    user_id         = user_id,
-                    order_status_id = OrderStatus.objects.get(name="checking_out").id
-                    )
+                Cart.objects.create(
+                        product_id = product_id,
+                        order_id   = Order.objects.get(user_id=user_id, order_status__name=ORDER_STATUS_CHECK).id
+                        )
 
-            Cart.objects.create(
-                    product_id = product_id,
-                    order_id   = Order.objects.get(user_id=user_id, order_status_id=OrderStatus.objects.get(name="checking_out").id).id
-                    )
-
-            return JsonResponse({'message': 'SUCCESS'}, status=201) #카트에 상품을 처음으로 담을때 (user의 Order (checking_out)가 없으면) 그때 Order (checking_out) 하나 생성하고 cart 하나 생성 합니다~
+                return JsonResponse({'message': 'SUCCESS'}, status=201)
 
         except KeyError:
             return JsonResponse({'message': 'KEY_ERROR'}, status=400)
@@ -56,20 +59,21 @@ class CartVoucherView(View):
             voucher_code     = data.get('voucher_code')
             user_id          = request.user.item_id
 
-            if OrderStatus.objects.get(name="checking_out").orders.filter(user_id=user_id).exists():
+            if Order.objects.filter(user_id=user_id, order_status__name=ORDER_STATUS_CHECK).exists():
                 Cart.objects.create(
                         voucher_id = Voucher.objects.create(
                             price    = voucher_price,
                             code     = voucher_code,
                             quantity = voucher_quantity).id,
-                        order_id   = Order.objects.get(user_id=user_id, order_status_id=OrderStatus.objects.get(name="checking_out").id).id
+                        order_id   = Order.objects.get(user_id=user_id, order_status__name=ORDER_STATUS_CHECK).id
                         )
 
                 return JsonResponse({'message': 'SUCCESS'}, status=201) 
 
             Order.objects.create(
                     user_id         = user_id,
-                    order_status_id = OrderStatus.objects.get(name="checking_out").id
+                    order_status_id = OrderStatus.objects.get(name=ORDER_STATUS_CHECK
+                    ).id
                     )
 
             Cart.objects.create(
@@ -77,7 +81,7 @@ class CartVoucherView(View):
                         price    = voucher_price,
                         code     = voucher_code,
                         quantity = voucher_quantity).id,
-                    order_id   = Order.objects.get(user_id=user_id, order_status_id=OrderStatus.objects.get(name="checking_out").id).id
+                    order_id   = Order.objects.get(user_id=user_id, order_status__name=ORDER_STATUS_CHECK).id
                     )
 
             return JsonResponse({'message': 'SUCCESS'}, status=201)
@@ -90,7 +94,7 @@ class CartView(View):
     def get(self, request):
         try:
             user_id          = request.user.id
-            order            = Order.objects.get(user_id=user_id, order_status_id=OrderStatus.objects.get(name="checking_out").id)
+            order            = Order.objects.get(user_id=user_id, order_status__name=ORDER_STATUS_CHECK)
             cart_list        = order.carts.all()
             total_price      = 0
             total_products   = 0
@@ -140,7 +144,7 @@ class CartView(View):
     def delete(self, request, item_id):
         try:
             user_id   = request.user.id
-            order     = OrderStatus.objects.get(name="checking_out").orders.get(user_id=user_id)
+            order     = Order.objects.get(user_id=user_id, order_status__name=ORDER_STATUS_CHECK)
             cart_list = order.carts.all()
 
             for cart in cart_list:
