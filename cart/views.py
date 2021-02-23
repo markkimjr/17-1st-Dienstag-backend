@@ -11,7 +11,7 @@ from product.models import Product
 from voucher.models import Voucher
 
 
-class UserCartProductView(View):
+class CartProductView(View):
     @login_decorator
     def post(self, request):
         try:
@@ -42,7 +42,7 @@ class UserCartProductView(View):
         except KeyError:
             return JsonResponse({'message': 'KEY_ERROR'}, status=400)
 
-class UserCartVoucherView(View):
+class CartVoucherView(View):
     @login_decorator
     def post(self, request):
         try:
@@ -82,7 +82,7 @@ class UserCartVoucherView(View):
             return JsonResponse({'message': 'KEY_ERROR'}, status=400)
 
 
-class UserCartView(View):
+class CartView(View):
     @login_decorator
     def get(self, request):
         try:
@@ -133,7 +133,7 @@ class UserCartView(View):
         except KeyError:
             return JsonResponse({'message': 'KEY_ERROR'}, status=400)
 
-class UserCartDetailView(View):
+class CartDetailView(View):
     @login_decorator
     def delete(self, request, item_id):
         try:

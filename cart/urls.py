@@ -1,10 +1,10 @@
 from django.urls import path
 
-from cart.views  import UserCartView, UserCartProductView, UserCartVoucherView, UserCartDetailView
+from cart.views  import CartView, CartProductView, CartVoucherView, CartDetailView
 
 urlpatterns = [
-        path('', UserCartView.as_view()),
-        path('/<int:item_id>', UserCartDetailView.as_view()),
-        path('/product', UserCartProductView.as_view()),
-        path('/voucher', UserCartVoucherView.as_view()),
+        path('', CartView.as_view()),
+        path('/<int:item_id>', CartDetailView.as_view()),
+        path('/product', CartProductView.as_view()),
+        path('/voucher', CartVoucherView.as_view()),
         ]
