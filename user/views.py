@@ -8,6 +8,7 @@ from django.views         import View
 from dienstag.my_settings import SECRET, ALGORITHM
 from .models              import User, UserInformation
 from .utils               import login_decorator
+from cart.models          import AddressInformation
 
 class SignUpView(View):
     def post(self, request):
@@ -55,6 +56,22 @@ class SignInView(View):
                 token = jwt.encode({'user_id': user.id}, SECRET, ALGORITHM)
                 return JsonResponse({'message': 'SUCCESS', 'access_token': token}, status=200)
             return JsonResponse({'message': 'INVALID_PASSWORD'}, status=401)
+
+        except KeyError:
+            return JsonResponse({'message': 'KEY_ERROR'}, status=400)
+
+class NonMemberView(View):
+    def post(self, request):
+        try:
+            data = json.loads(request.body)
+            email = data['email']
+
+            if User.objects.filter(email=email).exists():
+                return JsonResponse({'message': 'ALREADY_EXIST'}, status=400)
+
+            if not User.objects.filter(email=email).exists():
+                User.objects.create(email=email, is_anonymous=True)
+            return JsonResponse({'message': 'SUCCESS'}, status=200)
 
         except KeyError:
             return JsonResponse({'message': 'KEY_ERROR'}, status=400)
