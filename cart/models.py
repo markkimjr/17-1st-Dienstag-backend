@@ -31,6 +31,7 @@ class AddressInformation(models.Model):
     billing_city                = models.CharField(max_length=100)
     billing_postal_code         = models.CharField(max_length=100)
     billing_phone_number        = models.CharField(max_length=100)
+    is_same                     = models.BooleanField()
     shipping_country            = models.CharField(max_length=100)
     shipping_first_name         = models.CharField(max_length=100)
     shipping_last_name          = models.CharField(max_length=100)
