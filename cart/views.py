@@ -22,14 +22,14 @@ class CartProductView(View):
             if OrderStatus.objects.get(name='checking_out').orders.filter(user_id=user_id).exists():
                 if Cart.objects.filter(product_id=product_id, order_id=Order.objects.get(user_id=user_id, order_status_id=OrderStatus.objects.get(name="checking_out").id).id).exists():
 
-                    return JsonResponse({'message': False}, status=403)
+                    return JsonResponse({'message': False}, status=403) #만약에 product가 카트에 이미 존재하면 프론트한테 에러 메세지를 보내요~
 
                 Cart.objects.create(
                     product_id = product_id, 
                     order_id   = Order.objects.get(user_id=user_id, order_status_id=OrderStatus.objects.get(name="checking_out").id).id
                     )
 
-                return JsonResponse({'message': 'SUCCESS'}, status=201)
+                return JsonResponse({'message': 'SUCCESS'}, status=201) #User Order(checking_out)가 이미 존재할때 Cart에 상품을 추가해줘요~
 
             Order.objects.create(
                     user_id         = user_id,
@@ -41,7 +41,7 @@ class CartProductView(View):
                     order_id   = Order.objects.get(user_id=user_id, order_status_id=OrderStatus.objects.get(name="checking_out").id).id
                     )
 
-            return JsonResponse({'message': 'SUCCESS'}, status=201)
+            return JsonResponse({'message': 'SUCCESS'}, status=201) #카트에 상품을 처음으로 담을때 (user의 Order (checking_out)가 없으면) 그때 Order (checking_out) 하나 생성하고 cart 하나 생성 합니다~
 
         except KeyError:
             return JsonResponse({'message': 'KEY_ERROR'}, status=400)
@@ -65,7 +65,7 @@ class CartVoucherView(View):
                         order_id   = Order.objects.get(user_id=user_id, order_status_id=OrderStatus.objects.get(name="checking_out").id).id
                         )
 
-                return JsonResponse({'message': 'SUCCESS'}, status=201)
+                return JsonResponse({'message': 'SUCCESS'}, status=201) 
 
             Order.objects.create(
                     user_id         = user_id,
@@ -84,7 +84,6 @@ class CartVoucherView(View):
 
         except KeyError:
             return JsonResponse({'message': 'KEY_ERROR'}, status=400)
-
 
 class CartView(View):
     @login_decorator
@@ -137,7 +136,6 @@ class CartView(View):
         except KeyError:
             return JsonResponse({'message': 'KEY_ERROR'}, status=400)
 
-class CartDetailView(View):
     @login_decorator
     def delete(self, request, item_id):
         try:
