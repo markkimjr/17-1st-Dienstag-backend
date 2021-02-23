@@ -2,7 +2,7 @@ from django.db import models
 
 class User(models.Model):
     email        = models.EmailField(max_length=200, unique=True)
-    is_anonymous = models.BooleanField()
+    is_anonymous = models.BooleanField(default=False)
 
     class Meta:
         db_table = 'users'

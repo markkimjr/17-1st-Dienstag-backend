@@ -21,6 +21,7 @@ class Order(models.Model):
     class Meta:
         db_table = 'orders'
 
+
 class AddressInformation(models.Model):
     billing_country             = models.CharField(max_length=100)
     billing_first_name          = models.CharField(max_length=100)
