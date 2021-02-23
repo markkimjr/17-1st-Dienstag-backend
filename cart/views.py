@@ -20,6 +20,10 @@ class CartProductView(View):
             user_id          = request.user.id
 
             if OrderStatus.objects.get(name='checking_out').orders.filter(user_id=user_id).exists():
+                if Cart.objects.filter(product_id=product_id, order_id=Order.objects.get(user_id=user_id, order_status_id=OrderStatus.objects.get(name="checking_out").id).id).exists():
+
+                    return JsonResponse({'message': False}, status=403)
+
                 Cart.objects.create(
                     product_id = product_id, 
                     order_id   = Order.objects.get(user_id=user_id, order_status_id=OrderStatus.objects.get(name="checking_out").id).id
