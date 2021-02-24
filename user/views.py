@@ -53,18 +53,8 @@ class SignInView(View):
 
             if bcrypt.checkpw(password.encode('utf-8'), user.user_information.get(user=user).password.encode('utf-8')):
                 token = jwt.encode({'user_id': user.id}, SECRET, ALGORITHM)
-                return JsonResponse({'message': 'SUCCESS', 'access_token': token}, status=200)
+                return JsonResponse({'message': 'SUCCESS', 'access_token': token, 'email': email, 'username': user.user_information.get(user=user).username}, status=200)
             return JsonResponse({'message': 'INVALID_PASSWORD'}, status=401)
 
         except KeyError:
             return JsonResponse({'message': 'KEY_ERROR'}, status=400)
-
-class LogoutView(View):
-    @login_decorator
-    def get(self, request):
-        user = request.user
-        user_information = {
-            'email'    : user.email,
-            'username' : user.user_information.get(user=user).username
-        }
-        return JsonResponse({'message': 'SUCCESS', 'user_information': user_information}, status=200)
