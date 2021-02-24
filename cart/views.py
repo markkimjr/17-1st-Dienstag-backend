@@ -22,23 +22,23 @@ class OrderDetailView(View):
             
             AddressInformation.objects.create(
                 user_id                     = user.id,
-                billing_country             = data['billing_country']
-                billing_first_name          = data['billing_first_name']
-                billing_last_name           = data['billing_last_name']
-                billing_street_number       = data['billing_street_number']
-                billing_additional_address  = data['billing_additional_address']
-                billing_district            = data['billing_district']
-                billing_city                = data['billing_city']
-                billing_postal_code         = data['billing_postal_code']
-                billing_phone_number        = data['billing_phone_number']
-                shipping_country            = data['shipping_country']
-                shipping_first_name         = data['shipping_first_name']
-                shipping_last_name          = data['shipping_last_name']
-                shipping_street_number      = data['shipping_street_number']
-                shipping_additional_address = data['shipping_additional_address']
-                shipping_district           = data['shipping_district']
-                shipping_city               = data['shipping_city']
-                shipping_postal_code        = data['shipping_postal_code']
+                billing_country             = data['billing_country'],
+                billing_first_name          = data['billing_first_name'],
+                billing_last_name           = data['billing_last_name'],
+                billing_street_number       = data['billing_street_number'],
+                billing_additional_address  = data['billing_additional_address'],
+                billing_district            = data['billing_district'],
+                billing_city                = data['billing_city'],
+                billing_postal_code         = data['billing_postal_code'],
+                billing_phone_number        = data['billing_phone_number'],
+                shipping_country            = data['shipping_country'],
+                shipping_first_name         = data['shipping_first_name'],
+                shipping_last_name          = data['shipping_last_name'],
+                shipping_street_number      = data['shipping_street_number'],
+                shipping_additional_address = data['shipping_additional_address'],
+                shipping_district           = data['shipping_district'],
+                shipping_city               = data['shipping_city'],
+                shipping_postal_code        = data['shipping_postal_code'],
                 shipping_phone_number       = data['shipping_phone_number']
             )
             
