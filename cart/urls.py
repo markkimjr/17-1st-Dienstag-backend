@@ -8,3 +8,4 @@ urlpatterns = [
         path('/product', CartProductView.as_view()),
         path('/voucher', CartVoucherView.as_view()),
         ]
+

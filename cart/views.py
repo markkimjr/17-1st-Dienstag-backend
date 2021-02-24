@@ -9,6 +9,7 @@ from user.models    import User
 from user.utils     import login_decorator
 from product.models import Product
 from voucher.models import Voucher
+from user.utils     import login_decorator
 
 ORDER_STATUS_CHECK = 'checking_out'
 
