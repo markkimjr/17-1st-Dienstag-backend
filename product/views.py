@@ -2,6 +2,7 @@ import json
 
 from django.views     import View
 from django.http      import JsonResponse
+from django.db.models import Q
 
 from .models      import BagType, BagModel, Product, Color, Size, Recommendation
 
@@ -18,7 +19,7 @@ class CategoryListView(View):
                     {
                         'id'       : product.id,
                         'image_url': product.image_url,
-                    }for product in model.products.all()[:MODEL_ITEM_QUANTITY]
+                    } for product in model.products.all()[:MODEL_ITEM_QUANTITY]
                 ]
             } for model in models
         ]
@@ -29,7 +30,7 @@ class ModelDetailView(View):
     def get(self, request):
         bag_model_id    = request.GET.get('bag_model', None)
         products        = Product.objects.filter(bag_model=bag_model_id)
-        recommendations = BagModel.objects.get(id=bag_model_id).recommendations.all()
+        recommendations = Recommendation.objects.filter(bag_model=bag_model_id)
 
         model_list = [
             {
@@ -56,12 +57,7 @@ class ModelDetailView(View):
 class FilterListView(View):
     def get(self, request):
         keyword  = request.GET.get('keyword', None)
-
-        if Color.objects.filter(name=keyword).exists():
-            products = Color.objects.get(name=keyword).products.all()
-
-        if Size.objects.filter(name=keyword).exists():
-            products = Size.objects.get(name=keyword).products.all()
+        products = Product.objects.filter(Q(color__name=keyword)| Q(size__name=keyword))
 
         filter_item_list = [
             {
