@@ -1,7 +1,8 @@
 from django.urls import path
-from .views      import BackpackListView,ModelListView
+from .views      import CategoryListView, ModelDetailView, FilterListView
 
 urlpatterns = [
-    path('/backpacks', BackpackListView.as_view()),
-    path('/models', ModelListView.as_view())
+    path('/category', CategoryListView.as_view()),
+    path('/model', ModelDetailView.as_view()),
+    path('/filter', FilterListView.as_view())
     ]
