@@ -8,8 +8,8 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('voucher', '0001_initial'),
-        ('product', '0002_auto_20210218_0155'),
-        ('cart', '0012_auto_20210219_0957'),
+        ('product', '0001_initial'),
+        ('cart', '0001_initial'),
     ]
 
     operations = [
