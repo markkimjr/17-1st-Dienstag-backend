@@ -22,7 +22,7 @@ class CartProductView(View):
             user_id    = request.user.id
 
             if not Product.objects.filter(id=product_id).exists():
-                return JsonResponse({'message': 'INVALID_PRODUCT'}, status=400) #만약에 프론트에서 보내주는 product_id가 database에 없는 product이면 500Error 되신에 'INVALID_PRODUCT' 메세지를 보내요
+                return JsonResponse({'message': 'INVALID_PRODUCT'}, status=400)
 
             if Order.objects.filter(user_id=user_id, order_status__name=ORDER_STATUS_CHECK, carts__product_id=product_id).exists():
                 return JsonResponse({'message': False}, status=403)
