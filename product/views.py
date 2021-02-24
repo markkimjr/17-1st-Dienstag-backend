@@ -17,7 +17,7 @@ class CategoryListView(View):
                 model.name: [
                     {
                         'id'       : product.id,
-                        'image_url': products.image_url,
+                        'image_url': product.image_url,
                     }for product in model.products.all()[:MODEL_ITEM_QUANTITY]
                 ]
             } for model in models
