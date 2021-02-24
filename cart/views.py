@@ -46,26 +46,3 @@ class OrderDetailView(View):
         
         except KeyError:
             return JsonResponse({'message': 'KEY_ERROR'}, status=400)
-
-    @login_decorator
-    def get(self, request):
-        user = request.user
-        order_detail = {
-            'email'                  : user.email,
-            'shipping_first_name'    : user.address_information.get(user=user).shipping_first_name,
-            'shipping_last_name'     : user.address_information.get(user=user).shipping_last_name,
-            'shipping_street_number' : user.address_information.get(user=user).shipping_street_number,
-            'shipping_district'      : user.address_information.get(user=user).shipping_district,
-            'shipping_city'          : user.address_information.get(user=user).shipping_city,
-            'shipping_postal_code'   : user.address_information.get(user=user).shipping_postal_code,
-            'shipping_country'       : user.address_information.get(user=user).shipping_country,
-            'billing_first_name'     : user.address_information.get(user=user).billing_first_name,
-            'billing_last_name'      : user.address_information.get(user=user).billing_last_name,
-            'billing_street_number'  : user.address_information.get(user=user).billing_street_number,
-            'billing_district'       : user.address_information.get(user=user).billing_district,
-            'billing_city'           : user.address_information.get(user=user).billing_city,
-            'billing_postal_code'    : user.address_information.get(user=user).billing_postal_code,
-            'billing_country'        : user.address_information.get(user=user).billing_country,
-            'billing_phone_number'   : user.address_information.get(user=user).billing_phone_number,
-        }
-        return JsonResponse({'message': 'SUCCESS', 'order_detail': order_detail}, status=200)
