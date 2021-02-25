@@ -12,7 +12,7 @@ from voucher.models import Voucher
 
 ORDER_STATUS_CHECK = 'checking_out'
 
-class CartProductView(View):
+class CartView(View):
     @login_decorator
     def post(self, request):
         try:
@@ -50,8 +50,7 @@ class CartProductView(View):
 
         except (Order.DoesNotExist, Order.MultipleObjectsReturned):
             return JsonResponse({'message': 'INVALID_ORDER'}, status=400)
-
-class CartView(View):
+    
     @login_decorator
     def get(self, request):
         try:
@@ -60,19 +59,19 @@ class CartView(View):
             cart_list        = order.carts.all()
             total_items_list = [{
                 'cart_id'      : cart.id,
-                'item_id'      : cart.product_id if not cart.voucher else cart.voucher_id,
-                'model_number' : cart.product.model_number if not cart.voucher else cart.voucher.code,
-                'title'        : cart.product.bag_model.name if not cart.voucher else None,
-                'price'        : cart.product.price if not cart.voucher else cart.voucher.price,
-                'quantity'     : 1 if not cart.voucher else cart.voucher.quantity,
-                'image_url'    : cart.product.images.all()[0].image_url if not cart.voucher else None
+                'item_id'      : cart.product_id,
+                'model_number' : cart.product.model_number,
+                'title'        : cart.product.bag_model.name,
+                'price'        : cart.product.price,
+                'quantity'     : 1,
+                'image_url'    : cart.product.image_url
                 } for cart in cart_list]
             total_items      = len(total_items_list)
 
             return JsonResponse({
                 'data': {
                     'total_items_list' : total_items_list,
-                    'total_items'      : total_items
+                    'total_items'      : total_items,
                     }}, status=200)
         
         except KeyError:
