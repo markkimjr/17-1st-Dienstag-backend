@@ -9,7 +9,7 @@ class Migration(migrations.Migration):
     dependencies = [
         ('voucher', '0001_initial'),
         ('product', '0003_remove_bagmodel_video'),
-        ('cart', '0012_auto_20210219_0957'),
+        ('cart', '0001_initial'),
     ]
 
     operations = [

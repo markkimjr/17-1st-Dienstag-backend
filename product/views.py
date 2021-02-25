@@ -26,21 +26,17 @@ class CategoryListView(View):
 
         return JsonResponse({'data':item_list}, status=200)
 
-class ModelDetailView(View):
+class ProductListView(View):
     def get(self, request):
         bag_model_id    = request.GET.get('bag_model', None)
-        products        = Product.objects.filter(bag_model=bag_model_id)
+        keyword         = request.GET.get('keyword', None)
+        products        = Product.objects.filter(Q(bag_model=bag_model_id)|Q(color__name=keyword)|Q(size__name=keyword))
         recommendations = Recommendation.objects.filter(bag_model=bag_model_id)
 
         model_list = [
             {
                 'id'          : product.id,
                 'image_url'   : product.image_url,
-                'model_number': product.model_number,
-                'price'       : product.price,
-                'color_name'  : product.color.name,
-                'size_name'   : product.size.name,
-                'description' : product.description.split('/')
             } for product in products
         ]
 
@@ -54,13 +50,12 @@ class ModelDetailView(View):
 
         return JsonResponse({'ModelList': model_list, 'RecommendationList': recommendation_list}, status=200)
 
-class FilterListView(View):
+class ProductDetailView(View):
     def get(self, request):
-        keyword  = request.GET.get('keyword', None)
-        products = Product.objects.filter(Q(color__name=keyword)| Q(size__name=keyword))
+        product_id = request.GET.get('product_id', None)
+        product    = Product.objects.get(id=product_id)
 
-        filter_item_list = [
-            {
+        item_info = {
                 'id'          : product.id,
                 'image_url'   : product.image_url,
                 'model_number': product.model_number,
@@ -68,7 +63,7 @@ class FilterListView(View):
                 'color_name'  : product.color.name,
                 'size_name'   : product.size.name,
                 'description' : product.description.split('/')
-            } for product in products
-        ]
+            }
 
-        return JsonResponse({'ItemList': filter_item_list}, status=200)
+        return JsonResponse({'ItemInfo': item_info}, status=200)
+
