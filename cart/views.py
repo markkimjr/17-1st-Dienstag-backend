@@ -9,7 +9,6 @@ from user.models    import User
 from user.utils     import login_decorator
 from product.models import Product
 from voucher.models import Voucher
-from user.utils     import login_decorator
 
 ORDER_STATUS_CHECK = 'checking_out'
 
@@ -49,43 +48,8 @@ class CartProductView(View):
         except KeyError:
             return JsonResponse({'message': 'KEY_ERROR'}, status=400)
 
-class CartVoucherView(View):
-    @login_decorator
-    def post(self, request):
-        try:
-            data             = json.loads(request.body)
-            voucher_quantity = data.get('voucher_quantity')
-            voucher_price    = data.get('voucher_price')
-            voucher_code     = data.get('voucher_code')
-            user_id          = request.user.id
-
-            if Order.objects.filter(user_id=user_id, order_status__name=ORDER_STATUS_CHECK).exists():
-                Cart.objects.create(
-                        voucher_id = Voucher.objects.create(
-                            price    = voucher_price,
-                            code     = voucher_code,
-                            quantity = voucher_quantity).id,
-                        order_id   = Order.objects.get(user_id=user_id, order_status__name=ORDER_STATUS_CHECK).id
-                        )
-                return JsonResponse({'message': 'SUCCESS'}, status=201) 
-
-            order = Order.objects.create(
-                    user_id         = user_id,
-                    order_status_id = OrderStatus.objects.get(name=ORDER_STATUS_CHECK
-                    ).id
-                    )
-
-            Cart.objects.create(
-                    voucher_id = Voucher.objects.create(
-                        price    = voucher_price,
-                        code     = voucher_code,
-                        quantity = voucher_quantity).id,
-                    order_id   = order.id
-                    )
-            return JsonResponse({'message': 'SUCCESS'}, status=201)
-
-        except KeyError:
-            return JsonResponse({'message': 'KEY_ERROR'}, status=400)
+        except (Order.DoesNotExist, Order.MultipleObjectsReturned):
+            return JsonResponse({'message': 'INVALID_ORDER'}, status=400)
 
 class CartView(View):
     @login_decorator
@@ -114,6 +78,9 @@ class CartView(View):
         except KeyError:
             return JsonResponse({'message': 'KEY_ERROR'}, status=400)
 
+        except Order.DoesNotExist:
+            return JsonResponse({'message': 'INVALID_ORDER'}, status=400)
+
     @login_decorator
     def delete(self, request, cart_id): 
         try:
@@ -122,3 +89,4 @@ class CartView(View):
 
         except Cart.DoesNotExist:
             return JsonResponse({'message': 'INVALID_CART'}, status=400)
+
