@@ -8,7 +8,6 @@ class BagType(models.Model):
 
 class BagModel(models.Model):
     name     = models.CharField(max_length=100)
-    video    = models.URLField(max_length=2000)
     bag_type = models.ForeignKey('BagType', on_delete=models.CASCADE, related_name='bag_models')
 
     class Meta:
@@ -21,6 +20,7 @@ class Product(models.Model):
     bag_model    = models.ForeignKey('BagModel', on_delete=models.CASCADE, related_name='products')
     color        = models.ForeignKey('Color', on_delete=models.CASCADE, related_name='products')
     size         = models.ForeignKey('Size', on_delete=models.CASCADE, related_name='products')
+    image_url    = models.URLField(max_length=2000)
 
     class Meta:
         db_table = 'products'
@@ -36,13 +36,6 @@ class Size(models.Model):
 
     class Meta:
         db_table = 'sizes'
-
-class Image(models.Model):
-    image_url = models.URLField(max_length=2000)
-    product   = models.ForeignKey('Product', on_delete=models.CASCADE, related_name='images')
-
-    class Meta:
-        db_table = 'images'
 
 class Recommendation(models.Model):
     product   = models.ForeignKey('Product', on_delete=models.CASCADE, related_name='recommendations')
