@@ -24,6 +24,7 @@
 ![trello](https://user-images.githubusercontent.com/72085261/109430747-3c209600-7a46-11eb-9a5a-49780b91f427.gif)
 
 ## 내가 한 일들
+https://velog.io/@markkimjr/DIENSTAG-Thoughts-on-my-first-website-clone-coding-project
 - 백엔드 팀뭔들이랑 같이 database 모델링 (AQueryTool 사용)
 - 백엔드 팀원들이랑 같이 models.py 작성
 - cart/views.py 작성 (CartView GET, POST, DELETE)
