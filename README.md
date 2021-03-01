@@ -23,6 +23,14 @@
 - Trello, Slack 앱을 활용해 Scrum 방식으로 진행
 ![trello](https://user-images.githubusercontent.com/72085261/109430747-3c209600-7a46-11eb-9a5a-49780b91f427.gif)
 
+## 내가 한 일들
+- 백엔드 팀뭔들이랑 같이 database 모델링 (AQueryTool 사용)
+- 백엔드 팀원들이랑 같이 models.py 작성
+- cart/views.py 작성 (CartView GET, POST, DELETE)
+- 카트에 상품 추가/삭제할떄 카트 정보 데이터베이스에 저장 (POST, DELETE)
+- 카트 상품 정보 프론트한테 전달 (GET method)
+- cart/urls.py 작성 (REST API방식)
+
 ## 백엔드 구현 목록
 #### 회원가입 & 로그인
 - Bcrypt를 활용한 비밀번호 암호화
@@ -44,3 +52,4 @@
 - 이 프로젝트는 <a href="http://www.freitag.ch/">프라이탁</a> 사이트를 참조하여 학습목적으로 만들었습니다.
 - 실무수준의 프로젝트이지만 학습용으로 만들었기 때문에 이 코드를 활용하여 이득을 취하거나 무단 배포할 경우 법적으로 문제될 수 있습니다.
 - 이 프로젝트에서 사용하고 있는 사진 대부분은 위코드에서 구매한 것이므로 해당 프로젝트 외부인이 사용할 수 없습니다.
+
