@@ -1,5 +1,6 @@
 # Dienstag
 ![main](https://user-images.githubusercontent.com/72085261/109430603-8ce3bf00-7a45-11eb-8123-e9eae234e756.gif)
+[Watch on Youtube!](https://www.youtube.com/watch?v=-dh4nodC4Rc&t=40s)
 
 '디엔스탁'은 학습 목적으로 제작된 '프라이탁' 홈페이지를 클론 프로젝트입니다. 재활용 소재로 만든 가방과 악세사리등을 만들고 각각의 제품들은 모두 다른 디자인이라는 특징을 가진 프라이탁 쇼핑몰의 기본적인 기능들을 구현했습니다. 사용된 이미지는 전부 직접 찍고 편집한 사진들임을 밝힙니다.
 
