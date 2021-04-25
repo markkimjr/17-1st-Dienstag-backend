@@ -27,7 +27,7 @@
 
 ## 내가 한 일들
 https://velog.io/@markkimjr/DIENSTAG-Thoughts-on-my-first-website-clone-coding-project
-- 백엔드 팀뭔들이랑 같이 database 모델링 (AQueryTool 사용)
+- 백엔드 팀원들이랑 같이 database 모델링 (AQueryTool 사용)
 - 백엔드 팀원들이랑 같이 models.py 작성
 - cart/views.py 작성 (CartView GET, POST, DELETE)
 - 카트에 상품 추가/삭제할떄 카트 정보 데이터베이스에 저장 (POST, DELETE)
